@@ -7,8 +7,8 @@ function saveimg(img)
  file = io.open("image.ppm", "w+")
  file:write("P3\n".. w .. " " .. h .."\n255\n") -- RGB IMAGE
  
- for i,v in ipairs(img) do
-    local p = v .. "\n"  
+ for i=0,#img do
+    local p = a[i] .. "\n"  
     file:write(p)
   end
  
