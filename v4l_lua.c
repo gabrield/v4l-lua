@@ -1,6 +1,5 @@
 /*
- Copyright (c) 2011 VISGRAF, IMPA. 
- Author: Gabriel Duarte <gabrield@impa.br>
+ Copyright (c) 2011 Gabriel Duarte <gabrield@impa.br>
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
