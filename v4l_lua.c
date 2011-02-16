@@ -126,8 +126,6 @@ static int get(lua_State *L)
     for(i = 0; i < IMGSIZE; ++i)
     {
         lua_pushnumber(L, img[i]);
-        /*printf("%d ", img[i]);*/
-        /*save_pnm(img, getwidth(), getheight(), 3); */
         lua_rawseti(L, -2, i);
     }
     
