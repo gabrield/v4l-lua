@@ -15,13 +15,6 @@ function saveimg(img)
   file:close()
 end
 
-
-
-function sleep(length)
-  local start = os.clock()
-  while os.clock() - start < length do end
-end
-
 camera = #arg
 
 if camera < 1 then
@@ -33,15 +26,23 @@ end
 print(camera)
 
 dev = v4l.open(camera)
+
+if dev < 0 then
+ print("camera not found")
+ os.exit(0)
+end
+
 w, h = v4l.widht(), v4l.height()
 
 print(w .. "x" .. h)
 
 for i=0,10 do
  a = v4l.getframe()
- saveimg(a)
- a = nil
 end
+
+saveimg(a)
+a = nil
+
 
 v4l.close(dev);
 
