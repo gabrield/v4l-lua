@@ -68,7 +68,7 @@ unsigned char *newframe()
 {
     get_frame();
     process_image((unsigned char *)buffers[buf.index].start, buf.bytesused, w, h);
-	return dst_buf;
+    return dst_buf;
 }
 
 
@@ -88,7 +88,7 @@ void process_image(unsigned char *p, int len, int W, int H)
            /*return NULL;*/
        }
         p = dst_buf;
-       	/*p = (unsigned char *)realloc(dst_buf,fmt.fmt.pix.sizeimage);*/
+           /*p = (unsigned char *)realloc(dst_buf,fmt.fmt.pix.sizeimage);*/
         len = fmt.fmt.pix.sizeimage;
     }
     /*return dst_buf;*/
@@ -153,7 +153,7 @@ int get_frame(void)
     {
         perror("select timeout");
         /*exit(EXIT_FAILURE);*/
-		return -1;
+        return -1;
     }
     
     read_frame();
@@ -377,13 +377,13 @@ int open_device(const char *dev)
      
     /*    fprintf(stderr, "Cannot identify '%s': %d, %s\n",
             dev, errno, strerror(errno));*/
-		return -1;
+        return -1;
     }
 
     if(!S_ISCHR(st.st_mode))
     {
 /*        fprintf(stderr, "%s is no device\n", dev);*/
-		return -1;
+        return -1;
     }
 
     fd = open(dev, O_RDWR /* required */  | O_NONBLOCK, 0);
