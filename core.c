@@ -199,7 +199,7 @@ void uninit_device()
         if(-1 == munmap(buffers[i].start, buffers[i].length))
             errno_exit("munmap");
     
-/*    if(dst_buf != NULL)
+    /*if(dst_buf != NULL)
         free(dst_buf);*/
               
     if(buffers != NULL)
