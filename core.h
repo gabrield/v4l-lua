@@ -56,7 +56,7 @@ static int read_frame(void);
 static int get_frame(void);
 static int xioctl(int fd, int request, void *arg);
 static void errno_exit(const char *s);
-unsigned char *process_image(unsigned char *, int, int, int);
+void process_image(unsigned char *, int, int, int);
 void stop_capturing(void);
 void start_capturing(void);
 void uninit_device(void);

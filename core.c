@@ -67,11 +67,12 @@ int xioctl(int fd, int request, void *arg)
 unsigned char *newframe()
 {
     get_frame();
-    return process_image((unsigned char *)buffers[buf.index].start, buf.bytesused, w, h);
+    process_image((unsigned char *)buffers[buf.index].start, buf.bytesused, w, h);
+	return dst_buf;
 }
 
 
-unsigned char *process_image(unsigned char *p, int len, int W, int H)
+void process_image(unsigned char *p, int len, int W, int H)
 {
 
     if (v4lconvert_convert(v4lconvert_data,
@@ -84,13 +85,13 @@ unsigned char *process_image(unsigned char *p, int len, int W, int H)
        if (errno != EAGAIN)
        {
            perror("v4l_convert");
-           return NULL;
+           /*return NULL;*/
        }
         p = dst_buf;
        	/*p = (unsigned char *)realloc(dst_buf,fmt.fmt.pix.sizeimage);*/
         len = fmt.fmt.pix.sizeimage;
     }
-    return dst_buf;
+    /*return dst_buf;*/
 }
 
 int read_frame(void)
