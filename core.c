@@ -172,7 +172,7 @@ void start_capturing(void)
     enum v4l2_buf_type type;
     struct v4l2_buffer buf;
 
-   printf("mmap method\n");
+   /*printf("mmap method\n");*/
    
    for (i = 0; i < n_buffers; ++i)
    {
@@ -325,13 +325,13 @@ void init_device()
     ret = xioctl(fd, VIDIOC_S_FMT, &src_fmt);
     sizeimage = src_fmt.fmt.pix.sizeimage;
     dst_buf = (unsigned char *)malloc(fmt.fmt.pix.sizeimage);
-
+/*
     printf("raw pixfmt: %c%c%c%c %dx%d\n",
                src_fmt.fmt.pix.pixelformat & 0xff,
                (src_fmt.fmt.pix.pixelformat >> 8) & 0xff,
                (src_fmt.fmt.pix.pixelformat >> 16) & 0xff,
                (src_fmt.fmt.pix.pixelformat >> 24) & 0xff,
-               src_fmt.fmt.pix.width, src_fmt.fmt.pix.height);
+               src_fmt.fmt.pix.width, src_fmt.fmt.pix.height);*/
   /*}
     else
     {
@@ -345,14 +345,14 @@ void init_device()
         /*errno_exit("VIDIOC_S_FMT");*/
         return;
     }
-    
+    /*
       
     printf("pixfmt: %c%c%c%c %dx%d\n",
            fmt.fmt.pix.pixelformat & 0xff,
            (fmt.fmt.pix.pixelformat >> 8) & 0xff,
            (fmt.fmt.pix.pixelformat >> 16) & 0xff,
            (fmt.fmt.pix.pixelformat >> 24) & 0xff,
-           fmt.fmt.pix.width, fmt.fmt.pix.height);
+           fmt.fmt.pix.width, fmt.fmt.pix.height);*/
     
     /* Note VIDIOC_S_FMT may change width and height. */
 
@@ -362,10 +362,10 @@ void init_device()
     init_mmap();
 }
 
-void close_device(int dev)
+int close_device(int dev)
 {
-    printf("Closing Device\n");
-    close(dev);
+    /*printf("Closing Device\n");*/
+    return close(dev);
 }
 
 int open_device(const char *dev)
@@ -375,14 +375,14 @@ int open_device(const char *dev)
     if(stat(dev, &st) < 0)
     {
      
-        fprintf(stderr, "Cannot identify '%s': %d, %s\n",
-            dev, errno, strerror(errno));
+    /*    fprintf(stderr, "Cannot identify '%s': %d, %s\n",
+            dev, errno, strerror(errno));*/
 		return -1;
     }
 
     if(!S_ISCHR(st.st_mode))
     {
-        fprintf(stderr, "%s is no device\n", dev);
+/*        fprintf(stderr, "%s is no device\n", dev);*/
 		return -1;
     }
 
@@ -390,8 +390,8 @@ int open_device(const char *dev)
     
     if (fd < 0)
     {
-        fprintf(stderr, "Cannot open '%s': %d, %s\n",
-            dev, errno, strerror(errno));
+/*        fprintf(stderr, "Cannot open '%s': %d, %s\n",
+            dev, errno, strerror(errno));*/
         return -1;
     }
     return fd;

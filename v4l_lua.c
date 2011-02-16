@@ -59,27 +59,36 @@ static int opencamera(lua_State *L)
 
     device = luaL_checkstring(L, 1);
     fd = open_device(device);
-    init_device();
-    start_capturing();
-    fprintf(stdout, "start_capturing\n");
-    lua_pushinteger(L, fd);
-    
+
+	if(fd > 0)
+    {
+        init_device();
+        start_capturing();
+        lua_pushinteger(L, fd);
+    }
+    else
+    {
+		printf("device error\n");
+        return luaL_error(L, "device error");
+    }
+
     return 1;
 }
 
 static int closecamera(lua_State *L)
 {
     int fd = -1;
+    int dev = 0;
 
     if(!lua_gettop(L))
         return luaL_error(L, "set a device");
 
     fd = luaL_checkinteger(L, 1);
-    printf("FD = %d\n", fd);
-    stop_capturing();
+    
     uninit_device();
-    close_device(fd);
-    printf("FD = %d\n", fd);
+    dev = close_device(fd);
+    lua_pushinteger(L, dev);
+    
     return 1;
 }
 

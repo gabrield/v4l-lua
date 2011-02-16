@@ -20,8 +20,6 @@ else
   camera = arg[1]
 end
 
-print(camera)
-
 dev = v4l.open(camera)
 
 if dev < 0 then
@@ -31,7 +29,7 @@ end
 
 w, h = v4l.widht(), v4l.height()
 
-print(w .. "x" .. h)
+print(camera .. ": " ..w .. "x" .. h)
 
 for i=0,10 do
    a = v4l.getframe()
@@ -40,7 +38,11 @@ end
 saveimg(a)
 a = nil
 
-v4l.close(dev);
+dev = v4l.close(dev);
+
+if dev == 0 then
+  print("File descriptor closed: " .. dev)
+end
 
 
 

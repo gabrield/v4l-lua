@@ -65,7 +65,7 @@ void init_device();
 int getwidth();
 int getheight();
 unsigned char *newframe();
-void close_device(int dev);
+int close_device(int dev);
 int open_device(const char *dev);
 
 #endif /*CORE_H*/
