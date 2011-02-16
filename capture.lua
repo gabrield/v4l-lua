@@ -37,11 +37,12 @@ w, h = v4l.widht(), v4l.height()
 
 print(w .. "x" .. h)
 
-a = v4l.getframe()
+for i=0,10 do
+ a = v4l.getframe()
+ saveimg(a)
+ a = nil
+end
 
-saveimg(a)
-
-a = nil 
 v4l.close(dev);
 
 
