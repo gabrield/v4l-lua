@@ -1,7 +1,6 @@
 #!/usr/bin/env lua
 
 require "v4l"
-require "table"
 
 function saveimg(img)
  file = io.open("image.ppm", "w+")
