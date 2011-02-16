@@ -40,7 +40,6 @@ print(w .. "x" .. h)
 a = v4l.getframe()
 
 saveimg(a)
-table.save(a, "teste")
 
 a = nil 
 v4l.close(dev);
