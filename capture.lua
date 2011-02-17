@@ -5,7 +5,7 @@ require "v4l"
 function saveimg(img)
  file = io.open("image.ppm", "w+")
  file:write("P3\n".. w .. " " .. h .."\n255\n") -- RGB IMAGE
- for i=0,#img do
+ for i=1,#img do
     local p = a[i] .. "\n"  
     file:write(p)
   end
@@ -31,9 +31,9 @@ w, h = v4l.widht(), v4l.height()
 
 print(camera .. ": " ..w .. "x" .. h)
 
-for i=0,10 do
+for i=1,10 do -- take 2 pics to get a better image
    a = v4l.getframe()
-   print(a[i] .. " " .. a[i+1] .. " "..  a[i+2])
+-- print(a[i] .. " " .. a[i+1] .. " "..  a[i+2])
 end
 
 saveimg(a)

@@ -10,16 +10,20 @@ Enjoy!
 
 
 require "v4l"
+require('lgob.gdk')
+require('lgob.gtk')
 
+--[[ 
 function saveimg(img)
  file = io.open("image.ppm", "w+")
- file:write("P3\n".. w .. " " .. h .."\n255\n") -- RGB IMAGE
+ file:write("P3\n".. w .. " " .. h .."\n255\n") 
  for i=1,#img do
     local p = a[i] .. "\n"  
     file:write(p)
   end
   file:close()
 end
+]] --
 
 camera = #arg
 
@@ -40,11 +44,11 @@ w, h = v4l.widht(), v4l.height()
 
 print(camera .. ": " ..w .. "x" .. h)
 
-for i=1,10 do
+for i=1,3 do -- take 3 pics to get a better image
    a = v4l.getframe()
 end
 
-saveimg(a)
+-- saveimg(a)
 
 
 dev = v4l.close(dev);
@@ -52,9 +56,6 @@ dev = v4l.close(dev);
 if dev == 0 then
   print("File descriptor closed: " .. dev)
 end
-
-require('lgob.gdk')
-require('lgob.gtk')
 
 img = "P3\n" .. w .. " " ..  h .. "\n255\n" .. table.concat(a, "\n")
 
@@ -73,8 +74,8 @@ image = gtk.Image.new_from_pixbuf(pixbuf)
 hbox:add(image)
 window:add(hbox)
 
-window:set('title', "Photo", 'window-position', gtk.WIN_POS_CENTER)
-window:connect('delete-event', gtk.main_quit)
+window:set('title', "Camera photo " .. camera .. "  "..  w .. "x" .. h, 'window-position', gtk.WIN_POS_CENTER)
+window:connect('delete-event', gtk.main_quit) 
 window:show_all()
 
 gtk.main()
