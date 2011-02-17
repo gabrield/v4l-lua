@@ -33,6 +33,7 @@ print(camera .. ": " ..w .. "x" .. h)
 
 for i=0,10 do
    a = v4l.getframe()
+   print(a[i] .. " " .. a[i+1] .. " "..  a[i+2])
 end
 
 saveimg(a)

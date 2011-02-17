@@ -135,7 +135,7 @@ static int get(lua_State *L)
     for(i = 0; i < IMGSIZE; ++i)
     {
         lua_pushnumber(L, img[i]);
-        lua_rawseti(L, -2, i);
+        lua_rawseti(L, -2, i+1);
     }
     
    
