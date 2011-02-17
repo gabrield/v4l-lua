@@ -52,10 +52,10 @@ struct buffer
 
 /* functions */
 
-static int read_frame(void);
-static int get_frame(void);
-static int xioctl(int fd, int request, void *arg);
-static void errno_exit(const char *s);
+int read_frame(void);
+int get_frame(void);
+int xioctl(int fd, int request, void *arg);
+void errno_exit(const char *s);
 void process_image(unsigned char *, int, int, int);
 void stop_capturing(void);
 void start_capturing(void);

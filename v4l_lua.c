@@ -92,34 +92,6 @@ static int closecamera(lua_State *L)
     return 1;
 }
 
-int save_pnm(unsigned char *buf, int x, int y, int depth)
-{
-    FILE *fp;
-    char bewf[128];
-    //buf = (unsigned char *)malloc(sizeof(x*y*depth));
-    snprintf(bewf ,sizeof(bewf), "capture.pnm");
-    /*printf("Allocating %dx%dx%d = %d of memory\n", x, y, depth, x*y*depth);*/
-    printf("%d %d %d\n\n", buf[0], buf[1], buf[2]);
-    if ((fp = fopen(bewf, "w+")) == NULL) {
-        perror("open");
-        exit(1);
-    }
-
-    if (depth == 3) {
-        fprintf(fp, "P6\n%d %d\n255\n", x, y);
-    }
-
-    if (depth == 1) {
-        fprintf(fp, "P5\n%d %d\n255\n", x, y);
-    }
-
-    fwrite((unsigned char*)buf, x * y * depth, 1, fp);
-    fclose(fp);
-    return 0;
-}
-
-
-
 static int get(lua_State *L)
 {
    
