@@ -1,5 +1,14 @@
 #! /usr/bin/env lua
 
+--[[ 
+This example depends on the lgob (a set of bindings of GObject-based libraries, like GTK+ and WebKitGtk, and some others like Cairo, for Lua).
+I've installed the 32 bits version of lgob from here: http://downloads.tuxfamily.org/oproj/bin/ubuntu32/
+You have the choice to install it from the sources, found at: http://oproj.tuxfamily.org/wiki/doku.php?id=lgob
+Enjoy!
+]] --
+
+
+
 require "v4l"
 
 function saveimg(img)
