@@ -64,21 +64,23 @@ img = "P3\n" .. w .. " " ..  h .. "\n255\n" .. table.concat(a, "\n")
 -- print(img)
 
 
-
+ -- DOES NOT WORK :(
 function update()
   a = v4l.getframe()
   img = "P3\n" .. w .. " " ..  h .. "\n255\n" .. table.concat(a, "\n")
+  loader = gdk.PixbufLoader.new()
   loader:write(img, img:len())
-  -- loader:close()
+  loader:close()
   pixbuf = loader:get_pixbuf()
   image = gtk.Image.new_from_pixbuf(pixbuf)
+  window:queue_draw()
   print("PHOTO")
 end
 
 
 loader = gdk.PixbufLoader.new()
 loader:write(img, img:len())
--- loader:close()
+loader:close()
 pixbuf = loader:get_pixbuf()
  
 window = gtk.Window.new()
