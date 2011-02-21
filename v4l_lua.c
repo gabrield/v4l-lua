@@ -36,7 +36,12 @@
 
 
 typedef unsigned char uint8;
-                 
+
+uint8 *img = NULL; 
+int IMGSIZE = 0;
+
+
+
 static int w(lua_State *L)
 {
     lua_pushnumber(L, getwidth());
@@ -53,7 +58,7 @@ static int opencamera(lua_State *L)
 {
     int fd = -1;
     const char *device;
-     
+    
     if(!lua_gettop(L))
         return luaL_error(L, "set a device");
 
@@ -72,6 +77,10 @@ static int opencamera(lua_State *L)
         return luaL_error(L, "device error");
     }
 
+    IMGSIZE = (getwidth()*getheight()*3);
+	img = (uint8*)malloc(sizeof(uint8)*(IMGSIZE));
+
+
     return 1;
 }
 
@@ -88,17 +97,15 @@ static int closecamera(lua_State *L)
     uninit_device();
     dev = close_device(fd);
     lua_pushinteger(L, dev);
-    
+    free(img); 
+
     return 1;
 }
 
 static int get(lua_State *L)
 {
    
-    int IMGSIZE = (getwidth()*getheight()*3);
-    uint8 *img;
     int i;
-    img = (uint8*)malloc(sizeof(uint8)*(IMGSIZE));
 
     img = newframe();
 
@@ -110,9 +117,6 @@ static int get(lua_State *L)
         lua_rawseti(L, -2, i+1);
     }
     
-   
-    free(img); 
-               
     return 1;
 }
 

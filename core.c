@@ -325,55 +325,41 @@ void init_device()
     ret = xioctl(fd, VIDIOC_S_FMT, &src_fmt);
     sizeimage = src_fmt.fmt.pix.sizeimage;
     dst_buf = (unsigned char *)malloc(fmt.fmt.pix.sizeimage);
-<<<<<<< HEAD
 
 #ifdef DEBUG
-=======
-/*
->>>>>>> 40887aa01dafcc080e4e5fcbb0be35e454177e5e
+
     printf("raw pixfmt: %c%c%c%c %dx%d\n",
                src_fmt.fmt.pix.pixelformat & 0xff,
                (src_fmt.fmt.pix.pixelformat >> 8) & 0xff,
                (src_fmt.fmt.pix.pixelformat >> 16) & 0xff,
                (src_fmt.fmt.pix.pixelformat >> 24) & 0xff,
-               src_fmt.fmt.pix.width, src_fmt.fmt.pix.height);*/
+               src_fmt.fmt.pix.width, src_fmt.fmt.pix.height);
   /*}
     else
     {
         ret = xioctl(fd, VIDIOC_S_FMT, &fmt);
         sizeimage = fmt.fmt.pix.sizeimage;
     }*/
-<<<<<<< HEAD
 #endif    
-=======
     
->>>>>>> 40887aa01dafcc080e4e5fcbb0be35e454177e5e
     if (ret < 0)
     {
         perror("VIDIOC_S_FMT");
         /*errno_exit("VIDIOC_S_FMT");*/
         return;
     }
-<<<<<<< HEAD
     
 #ifdef DEBUG
-=======
-    /*
->>>>>>> 40887aa01dafcc080e4e5fcbb0be35e454177e5e
-      
     printf("pixfmt: %c%c%c%c %dx%d\n",
            fmt.fmt.pix.pixelformat & 0xff,
            (fmt.fmt.pix.pixelformat >> 8) & 0xff,
            (fmt.fmt.pix.pixelformat >> 16) & 0xff,
            (fmt.fmt.pix.pixelformat >> 24) & 0xff,
-<<<<<<< HEAD
            fmt.fmt.pix.width, fmt.fmt.pix.height);
-#endif
-=======
-           fmt.fmt.pix.width, fmt.fmt.pix.height);*/
->>>>>>> 40887aa01dafcc080e4e5fcbb0be35e454177e5e
+           fmt.fmt.pix.width, fmt.fmt.pix.height);
     
     /* Note VIDIOC_S_FMT may change width and height. */
+#endif
 
     w = fmt.fmt.pix.width;
     h = fmt.fmt.pix.height;
