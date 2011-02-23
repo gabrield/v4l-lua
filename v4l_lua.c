@@ -78,7 +78,7 @@ static int opencamera(lua_State *L)
     }
 
     IMGSIZE = (getwidth()*getheight()*3);
-	/*img = (uint8*)malloc(sizeof(uint8)*(IMGSIZE));*/
+    /*img = (uint8*)malloc(sizeof(uint8)*(IMGSIZE));*/
 
 
     return 1;
