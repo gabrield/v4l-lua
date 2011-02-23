@@ -78,7 +78,7 @@ static int opencamera(lua_State *L)
     }
 
     IMGSIZE = (getwidth()*getheight()*3);
-	img = (uint8*)malloc(sizeof(uint8)*(IMGSIZE));
+	/*img = (uint8*)malloc(sizeof(uint8)*(IMGSIZE));*/
 
 
     return 1;
@@ -97,7 +97,7 @@ static int closecamera(lua_State *L)
     uninit_device();
     dev = close_device(fd);
     lua_pushinteger(L, dev);
-    free(img); 
+    /*free(img); */
 
     return 1;
 }
