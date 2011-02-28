@@ -13,7 +13,7 @@ require "v4l"
 require('lgob.gdk')
 require('lgob.gtk')
 
---[[ 
+ 
 function saveimg(img)
  file = io.open("image.ppm", "w+")
  file:write("P3\n".. w .. " " .. h .."\n255\n") 
@@ -23,7 +23,7 @@ function saveimg(img)
   end
   file:close()
 end
-]] --
+
 
 camera = #arg
 
@@ -51,29 +51,16 @@ for i=1,3 do -- take 3 pics to get a better image
 end
 
 img = "P3\n" .. w .. " " ..  h .. "\n255\n" .. table.concat(a, "\n") -- formats the image to pixbuf format
-for i=1,3 do -- take 3 pics to get a better image
-   a = v4l.getframe()
-end
 
 -- saveimg(a)
-
-
-img = "P3\n" .. w .. " " ..  h .. "\n255\n" .. table.concat(a, "\n")
 
 -- img = io.open("image.ppm", "r"):read("*a")
 -- print(img)
 
 
  -- DOES NOT WORK :(
-function update()
-  a = v4l.getframe()
-  img = "P3\n" .. w .. " " ..  h .. "\n255\n" .. table.concat(a, "\n")
-  loader = gdk.PixbufLoader.new()
-  loader:write(img, img:len())
-  loader:close()
-  pixbuf = loader:get_pixbuf()
-  image = gtk.Image.new_from_pixbuf(pixbuf)
-  window:queue_draw()
+function save(img)
+  saveimg(img)
   print("PHOTO")
 end
 
@@ -87,7 +74,7 @@ window = gtk.Window.new()
 hbox = gtk.VBox.new(false, 10)
 
 image = gtk.Image.new_from_pixbuf(pixbuf)
-button = gtk.Button.new_with_label("Photo")
+button = gtk.Button.new_with_label("Save")
 
 hbox:add(image, button)
 
@@ -95,7 +82,7 @@ window:add(hbox)
 
 window:set('title', "Camera photo " .. camera .. "  "..  w .. "x" .. h, 'window-position', gtk.WIN_POS_CENTER)
 window:connect('delete-event', gtk.main_quit) 
-button:connect('clicked', update)
+button:connect('clicked', save, a)
 window:show_all()
 gtk.main()
 window:show_all()
