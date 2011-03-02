@@ -14,8 +14,8 @@ require('lgob.gdk')
 require('lgob.gtk')
 
  
-function saveimg(img)
- file = io.open("image.ppm", "w+")
+function saveimg(name, img)
+ file = io.open(name, "w+")
  file:write("P3\n".. w .. " " .. h .."\n255\n") 
  for i=1,#img do
     local p = a[i] .. "\n"  
@@ -58,11 +58,16 @@ img = "P3\n" .. w .. " " ..  h .. "\n255\n" .. table.concat(a, "\n") -- formats 
 -- print(img)
 
 
- -- DOES NOT WORK :(
-function save(img)
-  saveimg(img)
-  print("PHOTO")
+function runDialog(dialog)
+	dialog:run()
+	dialog:hide()
+	
+    names = dialog:get_filenames()
+    file = table.concat(names)
+    print(file)
+	saveimg(file, a)
 end
+
 
 
 loader = gdk.PixbufLoader.new()
@@ -76,13 +81,22 @@ hbox = gtk.VBox.new(false, 10)
 image = gtk.Image.new_from_pixbuf(pixbuf)
 button = gtk.Button.new_with_label("Save")
 
+dialog = gtk.FileChooserDialog.new("Select a name to save", window, gtk.FILE_CHOOSER_ACTION_SAVE,
+	"gtk-cancel", gtk.RESPONSE_CANCEL, "gtk-ok", gtk.RESPONSE_OK)
+
+filter = gtk.FileFilter.new()
+filter:add_pattern("*.ppm")
+filter:set_name("PPM Images")
+dialog:add_filter(filter)
+dialog:set("select-multiple", true)
+
 hbox:add(image, button)
 
 window:add(hbox)
 
 window:set('title', "Camera photo " .. camera .. "  "..  w .. "x" .. h, 'window-position', gtk.WIN_POS_CENTER)
 window:connect('delete-event', gtk.main_quit) 
-button:connect('clicked', save, a)
+button:connect('clicked', runDialog, dialog)
 window:show_all()
 gtk.main()
 window:show_all()
