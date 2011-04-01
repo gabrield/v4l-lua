@@ -24,7 +24,7 @@
 #include "core.h"
 
 int fd =-1;
-int w = 720, h = 480; /* ????? :( */
+int w = 720, h = 480; /* ????? :(  FIXME */
 struct v4lconvert_data *v4lconvert_data;
 struct v4l2_format src_fmt;    /* raw format */
 struct v4l2_buffer buf;
@@ -75,26 +75,23 @@ unsigned char *newframe()
 void process_image(unsigned char *p, int len, int W, int H)
 {
 
-    if (v4lconvert_convert(v4lconvert_data,
+    if(v4lconvert_convert(v4lconvert_data,
                            &src_fmt,
                            &fmt,
                            p, len,
                            dst_buf,
                            fmt.fmt.pix.sizeimage) < 0)
    {
-       if (errno != EAGAIN)
+       if(errno != EAGAIN)
        {
            perror("v4l_convert");
-           /*return NULL;*/
        }
         p = dst_buf;
-           /*p = (unsigned char *)realloc(dst_buf,fmt.fmt.pix.sizeimage);*/
         len = fmt.fmt.pix.sizeimage;
     }
-    /*return dst_buf;*/
 }
 
-int read_frame(void)
+int read_frame()
 {
     memset(&(buf), 0, sizeof(buf));
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -111,7 +108,7 @@ int read_frame(void)
                 /* Could ignore EIO, see spec. */
                 /* fall through */
             default:
-            /*errno_exit("VIDIOC_DQBUF");*/
+                /*errno_exit("VIDIOC_DQBUF");*/
                 perror("VIDIOC_DQBUF");
         }
     }
@@ -119,7 +116,7 @@ int read_frame(void)
     assert((unsigned char)buf.index < n_buffers);
     /*process_image((unsigned char*)buffers[buf.index].start, buf.bytesused, w, h);*/
 
-    if (xioctl(fd, VIDIOC_QBUF, &buf) < 0)
+    if(xioctl(fd, VIDIOC_QBUF, &buf) < 0)
         perror("VIDIOC_QBUF");
         /*errno_exit("VIDIOC_QBUF");*/
 
@@ -140,16 +137,16 @@ int get_frame(void)
     tv.tv_usec = 0;
 
     r = select(fd + 1, &fds, NULL, NULL, &tv);
-    if (r < 0)
+    if(r < 0)
     {
-        if (EINTR == errno)
+        if(EINTR == errno)
             return -1;
 
         perror("select");
         /*errno_exit("select");*/
     }
 
-    if (0 == r)
+    if(0 == r)
     {
         perror("select timeout");
         /*exit(EXIT_FAILURE);*/
@@ -210,6 +207,7 @@ void init_mmap()
 {
     struct v4l2_requestbuffers req;
     struct v4l2_buffer buf;
+
     memset(&(req), 0, sizeof(req));
     req.count = 4;
     req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -238,7 +236,7 @@ void init_mmap()
 
     buffers = (struct buffer*) calloc(req.count, sizeof(struct buffer));
 
-    if (!buffers)
+    if(!buffers)
     {
         fprintf(stderr, "Out of memory\n");
         perror("EXIT_FAILURE");
@@ -263,7 +261,7 @@ void init_mmap()
                         /* recommended */ ,
                         fd, buf.m.offset);
 
-        if (MAP_FAILED == buffers[n_buffers].start)
+        if(MAP_FAILED == buffers[n_buffers].start)
             errno_exit("mmap");
     }
 }
@@ -279,13 +277,11 @@ void init_device()
         if(EINVAL == errno)
         {
             fprintf(stderr, "%s is no V4L2 device\n", dev_name);
-            /*exit(EXIT_FAILURE);*/
             perror("EXIT_FAILURE");
             return;
         } 
         else
         {
-            /*errno_exit("VIDIOC_QUERYCAP");*/
             perror("VIDIOC_QUERYCAP");
             return ;
         }
@@ -314,7 +310,6 @@ void init_device()
         return;
     }
         
-            /*errno_exit("v4lconvert_create");*/
     if(v4lconvert_try_format(v4lconvert_data, &fmt, &src_fmt) != 0)
     {
         /*errno_exit("v4lconvert_try_format");*/
@@ -334,18 +329,11 @@ void init_device()
                (src_fmt.fmt.pix.pixelformat >> 16) & 0xff,
                (src_fmt.fmt.pix.pixelformat >> 24) & 0xff,
                src_fmt.fmt.pix.width, src_fmt.fmt.pix.height);
-  /*}
-    else
-    {
-        ret = xioctl(fd, VIDIOC_S_FMT, &fmt);
-        sizeimage = fmt.fmt.pix.sizeimage;
-    }*/
 #endif    
     
-    if (ret < 0)
+    if(ret < 0)
     {
         perror("VIDIOC_S_FMT");
-        /*errno_exit("VIDIOC_S_FMT");*/
         return;
     }
     
@@ -369,7 +357,6 @@ void init_device()
 
 int close_device(int dev)
 {
-    /*printf("Closing Device\n");*/
     return close(dev);
 }
 
@@ -379,24 +366,27 @@ int open_device(const char *dev)
 
     if(stat(dev, &st) < 0)
     {
-     
-    /*    fprintf(stderr, "Cannot identify '%s': %d, %s\n",
-            dev, errno, strerror(errno));*/
+#ifdef DEBUG    	    
+        fprintf(stderr, "Cannot identify '%s': %d, %s\n", dev, errno, strerror(errno));
+#endif
         return -1;
     }
 
     if(!S_ISCHR(st.st_mode))
     {
-/*        fprintf(stderr, "%s is no device\n", dev);*/
+#ifdef DEBUG    	    
+        fprintf(stderr, "%s is no device\n", dev);
+#endif
         return -1;
     }
 
     fd = open(dev, O_RDWR /* required */  | O_NONBLOCK, 0);
     
-    if (fd < 0)
+    if(fd < 0)
     {
-/*        fprintf(stderr, "Cannot open '%s': %d, %s\n",
-            dev, errno, strerror(errno));*/
+#ifdef DEBUG    	    
+        fprintf(stderr, "Cannot open '%s': %d, %s\n", dev, errno, strerror(errno));
+#endif
         return -1;
     }
     return fd;

@@ -59,8 +59,8 @@ img = "P3\n" .. w .. " " ..  h .. "\n255\n" .. table.concat(a, "\n") -- formats 
 
 
 function runDialog(dialog)
-	dialog:run()
-	dialog:hide()
+    dialog:run()
+    dialog:hide()
 	
     names = dialog:get_filenames()
     file = table.concat(names)
