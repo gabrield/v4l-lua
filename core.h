@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include <assert.h>
 
 #include <fcntl.h>		/* low-level i/o */
@@ -44,28 +45,36 @@
 #include <linux/videodev2.h>
 #include <libv4lconvert.h>
 
-struct buffer
-{
-	void *start;
-	size_t length;
+struct buffer {
+    void * start;
+    size_t length;
 };
 
-/* functions */
+struct device {
+    int fd;
+    char * path;
+    int w, h;
+    double timeout_secs;
+    struct v4l2_format src_fmt, fmt;
+    struct v4lconvert_data * v4lconvert_data;
+    unsigned char * dst_buf;
+    struct buffer * buffers;
+    int n_buffers;
+    void * errorfn_data;
+    void (*errorfn)(void * errorfn_data, char * fmt, ...);
+};
 
-int read_frame(void);
-int get_frame(void);
-int xioctl(int fd, int request, void *arg);
-void errno_exit(const char *s);
-void process_image(unsigned char *, int, int, int);
-void stop_capturing(void);
-void start_capturing(void);
-void uninit_device(void);
-void init_mmap(void);
-void init_device();
-int getwidth();
-int getheight();
-unsigned char *newframe();
-int close_device(int dev);
-int open_device(const char *dev);
+/* Refactored functions: on error return a negative value: */
+int open_device(struct device * dev, const char * path,
+    void * errorfn_data,
+    void (*errorfn)(void * errorfn_data, char * fmt, ...));
+int init_device(struct device * dev, int w, int h);
+void close_device(struct device * dev);
+
+int start_capturing(struct device * dev);
+void set_timout(struct device * dev, double secs);
+/* timeout on newframe can be detected via errorfn being reported the "timeout" string */
+unsigned char * newframe(struct device * dev);
 
 #endif /*CORE_H*/
+/* vi: set et sw=4: */
