@@ -3,3 +3,14 @@ See the example "capture.lua" to see how easy is to capture from V4L2 cameras :D
 To compile v4l-lua, you'll need the v4lconvert and Lua development files.
 
 WARNING: THIS LIBRARY STILL IS IN ALPHA STAGE! Plese, report bugs ;)
+
+Usage:
+
+local v4l = require 'v4l'
+
+dev = v4l.open(device_name) -- usually '/dev/video0'
+array = dev:getframe() -- table with rgb values for all the pixels
+w = dev:width()  -- return width
+h = dev:height() -- and height
+fd = dev:fd()    -- file descriptor number, if you need it for concurrent I/O with other files
+dev:close()      -- closes the camera freeing any resources
