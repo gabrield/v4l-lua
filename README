@@ -8,9 +8,22 @@ Usage:
 
 local v4l = require 'v4l'
 
-dev = v4l.open(device_name) -- usually '/dev/video0'
-array = dev:getframe() -- table with rgb values for all the pixels
-w = dev:width()  -- return width
-h = dev:height() -- and height
+dev = v4l.open(device_name, width, height)
+    -- opens a v4l camera, where: device_name is usually '/dev/video0', and the
+    -- optional params width and height can be used to suggest a resolution,
+    -- although a similar one may be chosen...
+
+array = dev:getframe()
+    -- returns a table with the rgb values for the pixels from left to right
+    -- top to bottom, in other words the the pixel (x,y) will appear at
+    -- array[c + 3 * (x + y * dev:width())], assuming (0,0) to be the
+    -- top left corner, and c=1 for red, c=2 for green and c=3 for blue.
+
+str = dev:getframestr()
+    -- similar to getframe, but the values will be returned via a string
+    -- instead of a table; you can use the string.byte for fast access.
+
+w = dev:width()  -- return effective width
+h = dev:height() -- and effective height
 fd = dev:fd()    -- file descriptor number, if you need it for concurrent I/O with other files
 dev:close()      -- closes the camera freeing any resources

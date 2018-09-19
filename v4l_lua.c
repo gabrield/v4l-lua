@@ -78,6 +78,12 @@ static int v4l_device_getframe(lua_State * L) {
     return 1;
 }
 
+static int v4l_device_getframestr(lua_State * L) {
+    struct device * dev = device_check(L, 1);
+    lua_pushlstring(L, (char*)newframe(dev), dev->w * dev->h * 3);
+    return 1;
+}
+
 static int v4l_device_close(lua_State * L) {
     close_device(device_check(L, 1));
     return 0;
@@ -114,15 +120,19 @@ static void errorfn_handler(void * errorfn_data, char * fmt, ...) {
 static int v4l_open(lua_State * L) {
     const char * path;
     struct device * dev = lua_newuserdata(L, sizeof (struct device));
+    int w, h;
 
     path = luaL_checkstring(L, 1);
+    w = luaL_optinteger(L, 2, 720);
+    h = luaL_optinteger(L, 3, 480);
+
     if (open_device(dev, path, L, errorfn_handler) < 0)
         return luaL_error(L, "device error");
 
     luaL_getmetatable(L, V4L_MT);
     lua_setmetatable(L, -2);
 
-    init_device(dev, 720, 480);
+    init_device(dev, w, h);
     start_capturing(dev);
     return 1;
 }
@@ -136,6 +146,7 @@ int LUA_API luaopen_v4l(lua_State *L) {
     if (luaL_newmetatable(L, V4L_MT)) {
         const luaL_Reg methods[] = {
             {"getframe", v4l_device_getframe},
+            {"getframestr", v4l_device_getframestr},
             {"close", v4l_device_close},
             {"width", v4l_device_width},
             {"height", v4l_device_height},
