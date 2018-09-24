@@ -9,7 +9,7 @@ Enjoy!
 
 
 
-require "v4l"
+v4l = require "v4l"
 require('lgob.gdk')
 require('lgob.gtk')
 
@@ -33,21 +33,16 @@ else
   camera = arg[1]
 end
 
-dev = v4l.open(camera)
+dev = v4l:open(camera)
 
-if dev < 0 then
-  print("camera not found")
-  os.exit(0)
-end
-
-w, h = v4l.widht(), v4l.height()
+w, h = dev:width(), dev:height()
 
 print(camera .. ": " ..w .. "x" .. h)
 
 -- saveimg(a)
 
 for i=1,3 do -- take 3 pics to get a better image
- a = v4l.getframe()
+ a = dev:getframe()
 end
 
 img = "P3\n" .. w .. " " ..  h .. "\n255\n" .. table.concat(a, "\n") -- formats the image to pixbuf format
@@ -105,9 +100,4 @@ window:show_all()
 img = nil
 a = nil
 
-dev = v4l.close(dev);
-
-if dev == 0 then
-  print("File descriptor closed: " .. dev)
-end
-
+dev:close()
